@@ -3,22 +3,19 @@
 [![Package Version](https://img.shields.io/hexpm/v/aoc_gleam)](https://hex.pm/packages/aoc_gleam)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/aoc_gleam/)
 
-```sh
-gleam add aoc_gleam@1
+## Advent of Code Gleam!!!!
+
+This repo uses gladvent.
+
+Clone then run the gladvent commands to see the output
+
 ```
-```gleam
-import aoc_gleam
-
-pub fn main() {
-  // TODO: An example of the project in use
-}
+gleam run run 1
 ```
 
-Further documentation can be found at <https://hexdocs.pm/aoc_gleam>.
+Make a new day
 
-## Development
-
-```sh
-gleam run   # Run the project
-gleam test  # Run the tests
 ```
+gleam run new 2 --year=2024
+```
+
