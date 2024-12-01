@@ -4,7 +4,7 @@ import gleam/list.{fold, group, interleave, map, sort, zip}
 import gleam/result.{unwrap}
 import gleam/string.{split}
 
-pub fn pt_1(input: String) {
+fn get_two_lists(input: String) {
   let input_strs =
     input
     |> split("\n")
@@ -18,7 +18,11 @@ pub fn pt_1(input: String) {
     })
 
   let combined = input_lists |> interleave()
-  let #(first, second) = combined |> list.split(list.length(combined) / 2)
+  combined |> list.split(list.length(combined) / 2)
+}
+
+pub fn pt_1(input: String) {
+  let #(first, second) = get_two_lists(input)
   let sorted_first = first |> sort(by: int.compare)
   let sorted_second = second |> sort(by: int.compare)
   let result =
@@ -32,20 +36,7 @@ pub fn pt_1(input: String) {
 }
 
 pub fn pt_2(input: String) {
-  let input_strs =
-    input
-    |> split("\n")
-
-  let input_lists =
-    input_strs
-    |> map(fn(str) {
-      str
-      |> split("   ")
-      |> map(fn(str) { str |> int.parse() |> unwrap(0) })
-    })
-
-  let combined = input_lists |> interleave()
-  let #(first, second) = combined |> list.split(list.length(combined) / 2)
+  let #(first, second) = get_two_lists(input)
   let sorted_first = first |> sort(by: int.compare)
   let sorted_second = second |> sort(by: int.compare)
   let grouped_second = sorted_second |> group(fn(a) { a })
