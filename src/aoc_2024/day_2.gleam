@@ -1,7 +1,9 @@
+import gleam/bool
 import gleam/int.{parse as to_int}
 import gleam/io
 import gleam/list.{map}
 import gleam/option.{type Option, None, Some}
+import gleam/pair
 import gleam/result.{unwrap}
 import gleam/string.{split}
 
@@ -45,6 +47,15 @@ pub fn is_safe(level: List(Int), direction: Direction) -> Bool {
     }
     _ -> True
   }
+}
+
+pub fn is_safe2(level: List(Int)) -> Bool {
+  let windows =
+    level
+    |> list.window_by_2
+    |> list.map(fn(nums) { pair.first(nums) - pair.second(nums) })
+  windows |> list.all(fn(n) { n > 0 && n < 4 })
+  || windows |> list.all(fn(n) { n < 0 && n > -4 })
 }
 
 pub fn pt_1(input: List(List(Int))) {
@@ -130,7 +141,10 @@ pub fn is_safe_with_skip(
 pub fn pt_2(input: List(List(Int))) {
   input
   |> list.count(fn(level) {
-    is_safe_with_skip(level, direction: Unknown, skip: 0, prev: None)
+    use <- bool.guard(is_safe2(level), True)
+    list.combinations(level, list.length(level) - 1)
+    |> list.find(fn(part_level) { is_safe2(part_level) })
+    |> result.is_ok
   })
   // 547 is too high
   // 515 is not correct, didn't say higher or lower
