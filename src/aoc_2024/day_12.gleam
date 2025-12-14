@@ -23,7 +23,7 @@ pub type Block {
   )
 }
 
-pub fn build_block(grid: Grid, loc: Vec, value: String) {
+pub fn build_block(grid: Grid(String), loc: Vec, value: String) {
   // adds the seen locs set for this block
   continue_build_block(
     grid,
@@ -42,7 +42,12 @@ fn add_side(sides: Dict(Vec, List(Vec)), dir: Vec, side: Vec) {
   })
 }
 
-pub fn continue_build_block(grid: Grid, loc: Vec, value: String, block: Block) {
+pub fn continue_build_block(
+  grid: Grid(String),
+  loc: Vec,
+  value: String,
+  block: Block,
+) {
   // we know this is a valid node, so add it to the block
   let next_block = Block(..block, locs: set.insert(block.locs, loc))
   // check each direction to see if we should add it to the block
@@ -80,7 +85,7 @@ pub fn continue_build_block(grid: Grid, loc: Vec, value: String, block: Block) {
   })
 }
 
-pub fn pt_1(grid: Grid) {
+pub fn pt_1(grid: Grid(String)) {
   // build the list of blocks
   dict.fold(grid, list.new(), fn(blocks, loc, value) {
     // check if we've already included this node in out blocks
@@ -150,7 +155,7 @@ fn get_side_count(sides: Dict(Vec, List(Vec))) {
   })
 }
 
-pub fn pt_2(grid: Grid) {
+pub fn pt_2(grid: Grid(String)) {
   // build the list of blocks
   dict.fold(grid, list.new(), fn(blocks, loc, value) {
     // check if we've already included this node in out blocks

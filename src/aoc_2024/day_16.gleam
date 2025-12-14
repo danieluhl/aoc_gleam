@@ -11,7 +11,7 @@ pub fn parse(input: String) {
   input |> grid.from_input
 }
 
-fn get_start(grid: Grid) {
+fn get_start(grid: Grid(String)) {
   grid
   |> dict.fold(Error("none found"), fn(acc, key, val) {
     case val == "S" {
@@ -22,13 +22,13 @@ fn get_start(grid: Grid) {
   |> result.unwrap(Vec(0, 0))
 }
 
-fn shortest_path(grid: Grid, start: Vec) {
-  continue_shortes_path(grid, dict.new(), start, grid.Right, 0, 0)
+fn shortest_path(grid: Grid(String), start: Vec) {
+  continue_shortest_path(grid, dict.new(), start, grid.Right, 0, 0)
 }
 
-fn continue_shortes_path(
-  grid: Grid,
-  visited: Grid,
+fn continue_shortest_path(
+  grid: Grid(String),
+  visited: Grid(String),
   loc: Vec,
   direction: Direction,
   turns: Int,
@@ -39,14 +39,24 @@ fn continue_shortes_path(
   let val = grid |> dict.get(loc) |> result.unwrap("")
   case val {
     "." | "S" -> {
-      // go left, right and forward
       let next_visited = visited |> dict.insert(loc, "")
+
+      let forward_loc = loc |> vec.add(grid.direction_vector(direction))
+      let forward_result =
+        continue_shortest_path(
+          grid,
+          next_visited,
+          forward_loc,
+          direction,
+          turns,
+          steps + 1,
+        )
 
       let #(clockwise_vec, clockwise_dir) =
         grid.get_next_clockwise_direction(direction)
       let clockwise_loc = loc |> vec.add(clockwise_vec)
       let clockwise_result =
-        continue_shortes_path(
+        continue_shortest_path(
           grid,
           next_visited,
           clockwise_loc,
@@ -59,23 +69,12 @@ fn continue_shortes_path(
         grid.get_next_counter_clockwise_direction(direction)
       let counter_clockwise_loc = loc |> vec.add(counter_clockwise_vec)
       let counter_clockwise_result =
-        continue_shortes_path(
+        continue_shortest_path(
           grid,
           next_visited,
           counter_clockwise_loc,
           counter_clockwise_dir,
           turns + 1,
-          steps + 1,
-        )
-
-      let forward_loc = loc |> vec.add(grid.direction_vector(direction))
-      let forward_result =
-        continue_shortes_path(
-          grid,
-          next_visited,
-          forward_loc,
-          direction,
-          turns,
           steps + 1,
         )
 
@@ -89,7 +88,7 @@ fn continue_shortes_path(
     }
     "E" -> {
       // end
-      io.debug("end")
+      // io.debug("end")
       turns * 1000 + steps
     }
     _ -> {
@@ -99,7 +98,7 @@ fn continue_shortes_path(
   }
 }
 
-pub fn pt_1(input: Grid) {
+pub fn pt_1(input: Grid(String)) {
   // find the start
   // walk each direction until we find the E or dead end
   let start = get_start(input)
@@ -107,6 +106,6 @@ pub fn pt_1(input: Grid) {
   shortest_path(input, start)
 }
 
-pub fn pt_2(input: Grid) {
+pub fn pt_2(input: Grid(String)) {
   todo as "part 2 not implemented"
 }

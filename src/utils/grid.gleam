@@ -3,8 +3,8 @@ import gleam/list
 import gleam/string
 import utils/vec.{type Vec, Vec}
 
-pub type Grid =
-  Dict(Vec, String)
+pub type Grid(value) =
+  Dict(Vec, value)
 
 pub fn from_input(input: String) {
   input
